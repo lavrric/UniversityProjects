@@ -1,0 +1,14 @@
+x = Number(in("Enter x: ")));
+y = Number(in("Enter y: ")));
+z = Number(in("Enter z: ")));
+
+if(x >= y && x => z){
+	out(x);
+}
+else if(y >= x && y => z){
+	out(y);
+}
+else if(z >= x && z => y){
+	out(z);
+}
+

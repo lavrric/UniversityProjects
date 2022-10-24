@@ -1,0 +1,12 @@
+s = 0;
+
+n = Number(in());
+for(i = 1; i * i <= n; i++){
+	if(n % i == 0){
+		s = s + i;
+		if(i * i != n){
+			s = s + (n/i);
+		}
+	}
+}
+out(s);
