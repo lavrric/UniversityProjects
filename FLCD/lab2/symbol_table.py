@@ -1,3 +1,4 @@
+from functools import reduce
 from hash_table import HashTable
 from symbol_types import SymbolTypes
 
@@ -23,4 +24,9 @@ class SymbolTable:
         self.hash_table.clear()
 
     def __str__(self):
-        return str(self.hash_table)
+        return "Sym  Type\n" + \
+            reduce(
+                lambda a, b: a + b + '\n',
+                map(lambda x: str(x[0]) + ' ' + str(x[1]), self.hash_table.data),
+                ''
+            )
