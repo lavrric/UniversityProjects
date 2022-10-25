@@ -16,8 +16,8 @@ class Scanner:
         with open(filename) as f:
             self.program_lines = f.readlines()
 
-    def __parse_keywords(self):
-        keywords = []
+    def __parse_tokens(self):
+        tokens = []
         for line in self.program_lines:
             word = ''
             open_string_quotes = ''
@@ -33,27 +33,27 @@ class Scanner:
                     # close const string
                     if char == open_string_quotes:
                         open_string_quotes = ''
-                        keywords.append(word)
+                        tokens.append(word)
                 # handling <= != == >=
                 elif i < len(line) - 1 and (char + line[i+1]) in self.separators:
                     if len(word) and word not in self.keywords:
-                        keywords.append(word)
+                        tokens.append(word)
                     word = ''
                     i += 1
                 # simple separators
                 elif char in self.separators:
                     if len(word) and word not in self.keywords:
-                        keywords.append(word)
+                        tokens.append(word)
                     word = ''
                 else:
                     word += char
                 i += 1
                 if i == len(line) and len(word):
-                    keywords.append(word)
-        return keywords
+                    tokens.append(word)
+        return tokens
 
-    def __process_keywords(self, keywords):
-        for word in keywords:
+    def __process_tokens(self, tokens):
+        for word in tokens:
             if re.fullmatch(r"([a-zA-Z])([a-zA-Z_\d])*", word):
                 self.symbol_table.add(word, SymbolTypes.ID)
             elif re.fullmatch(r"['\"].*['\"]", word) and word[0] == word[-1]:
@@ -67,7 +67,7 @@ class Scanner:
     def scan(self, filename):
         self.symbol_table.clear()
         self.__load_file(filename)
-        return self.__process_keywords(self.__parse_keywords())
+        return self.__process_tokens(self.__parse_tokens())
 
 
 scanner = Scanner()
