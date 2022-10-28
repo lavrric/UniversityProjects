@@ -1,7 +1,7 @@
-from functools import reduce
-from symbol_table import SymbolTable
-from symbol_types import SymbolTypes
 import re
+
+from lab2.symbol_table import SymbolTable
+from lab2.symbol_types import SymbolTypes
 
 
 class Scanner:
@@ -59,7 +59,7 @@ class Scanner:
             elif re.fullmatch(r"['\"].*['\"]", word) and word[0] == word[-1]:
                 self.symbol_table.add(word, SymbolTypes.STRING_CONST)
             elif re.fullmatch(r"\d*", word):
-               self.symbol_table.add(word, SymbolTypes.INT_CONST)
+                self.symbol_table.add(word, SymbolTypes.INT_CONST)
             else:
                 print('Error:', word, "doesn't satisfy the lexicon of the language.")
         return self.symbol_table
