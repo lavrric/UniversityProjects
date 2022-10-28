@@ -53,14 +53,13 @@ class Scanner:
         return tokens
 
     def __process_tokens(self, tokens):
-        curr_id = 1
         for word in tokens:
             if re.fullmatch(r"([a-zA-Z])([a-zA-Z_\d])*", word):
-                curr_id += 1 if self.symbol_table.add(word, curr_id, SymbolTypes.ID) else 0
+                self.symbol_table.add(word, SymbolTypes.ID)
             elif re.fullmatch(r"['\"].*['\"]", word) and word[0] == word[-1]:
-                curr_id += 1 if self.symbol_table.add(word, curr_id, SymbolTypes.STRING_CONST) else 0
+                self.symbol_table.add(word, SymbolTypes.STRING_CONST)
             elif re.fullmatch(r"\d*", word):
-                curr_id += 1 if self.symbol_table.add(word, curr_id, SymbolTypes.INT_CONST) else 0
+               self.symbol_table.add(word, SymbolTypes.INT_CONST)
             else:
                 print('Error:', word, "doesn't satisfy the lexicon of the language.")
         return self.symbol_table

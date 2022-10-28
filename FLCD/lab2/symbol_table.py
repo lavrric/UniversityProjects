@@ -21,11 +21,17 @@ class SymbolTableItem:
 class SymbolTable:
     def __init__(self):
         self.hash_table = HashTable()
+        self.__id = 0
 
-    def add(self, value, i, symbol_type):
+    @property
+    def id(self):
+        self.__id += 1
+        return self.__id
+
+    def add(self, value, symbol_type):
         if self.search(value):
             return False
-        self.hash_table.add(SymbolTableItem(value, i, symbol_type))
+        self.hash_table.add(SymbolTableItem(value, self.id, symbol_type))
         return True
 
     def search(self, value):
@@ -35,6 +41,7 @@ class SymbolTable:
         return None
 
     def clear(self):
+        self.__id = 0
         self.hash_table.clear()
 
     def __str__(self):
