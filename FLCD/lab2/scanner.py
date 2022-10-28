@@ -72,7 +72,8 @@ class Scanner:
 
 
 scanner = Scanner()
-filenames = ['p1.txt', 'p2.txt', 'p3.txt', 'p1_err.txt']
+filenames = ['../test_programs/p1.txt', '../test_programs/p2.txt',
+             '../test_programs/p3.txt', '../test_programs/p1_err.txt']
 print()
 for name in filenames:
     print('Working on', name + '...')
