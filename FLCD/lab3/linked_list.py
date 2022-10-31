@@ -1,6 +1,6 @@
 class Node:
-    def __init__(self, data=None):
-        self.data = data
+    def __init__(self, value=None):
+        self.value = value
         self.next = None
 
 
@@ -16,15 +16,20 @@ class LinkedList:
             self.tail.next = node
         else:
             self.head = node
-        self.cnt += 1
         self.tail = node
+        self.cnt += 1
+
+    def clear(self):
+        self.head = None
+        self.tail = None
+        self.cnt = 0
 
     @property
     def data(self):
         data = []
         node = self.head
         while node is not None:
-            data.append(node.data)
+            data.append(node.value)
             node = node.next
         return data
 

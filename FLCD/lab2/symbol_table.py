@@ -3,14 +3,22 @@ from hash_table import HashTable
 
 
 class SymbolTableItem:
-    def __init__(self, value, id, symbol_type):
+    def __init__(self, value, _id, symbol_type):
         self.__value = value
-        self.__id = id
+        self.__id = _id
         self.__symbol_type = symbol_type
 
     @property
     def value(self):
         return self.__value
+
+    @property
+    def id(self):
+        return self.__id
+
+    @property
+    def symbol_type(self):
+        return self.__symbol_type
 
     def __str__(self):
         return str(self.__value) + ' ' * max(1, 14 - len(str(self.__value))) + \

@@ -3,6 +3,7 @@ from enum import Enum
 
 from lab2.symbol_table import SymbolTable
 from lab2.symbol_types import SymbolTypes
+from lab3.pif import Pif
 
 
 class TokenType(Enum):
@@ -14,9 +15,15 @@ class Scanner:
     def __init__(self):
         self.program_lines = []
         self.symbol_table = SymbolTable()
+        self.pif = Pif()
         self.keywords = ['for', 'if', 'else', 'while', 'in', 'out', 'Number']
         self.separators = ['+', '-', '*', '**', '/', '%', '&&', '||', '<=', '==', '!=', '>=', '=',  '<',  '>', '{', '}', '(', ')',
                            ';', ' ', '\t', '\n', '"', "'"]
+
+    def __clear(self):
+        self.program_lines = []
+        self.symbol_table.clear()
+        self.pif.clear()
 
     def __load_file(self, filename):
         with open(filename) as f:
@@ -42,6 +49,7 @@ class Scanner:
                         tokens.append((word, TokenType.SYMBOL))
                 # handling <= != == >=
                 elif i < len(line) - 1 and (char + line[i+1]) in self.separators:
+                    word = word.strip()
                     if len(word):
                         tokens.append((word,
                                        TokenType.SEPARATOR if word in self.keywords + self.separators
@@ -51,25 +59,30 @@ class Scanner:
                     i += 1
                 # simple separators
                 elif char in self.separators:
+                    word = word.strip()
                     if len(word):
                         tokens.append((word,
                                        TokenType.SEPARATOR if word in self.keywords + self.separators
                                        else TokenType.SYMBOL))
-                    if char != ' ' and char != '\n':
+                    if char not in [' ', '\t', '\n']:
                         tokens.append((char, TokenType.SEPARATOR))
                     word = ''
                 else:
                     word += char
                 i += 1
-                if i == len(line) and len(word):
-                    tokens.append((word,
-                                   TokenType.SEPARATOR if word in self.keywords + self.separators
-                                   else TokenType.SYMBOL))
+                if i == len(line):
+                    word = word.strip()
+                    if len(word):
+                        tokens.append((word,
+                                      TokenType.SEPARATOR if word in self.keywords + self.separators
+                                      else TokenType.SYMBOL))
+                    word = ''
         # print(list(map(lambda token: token[0], filter(lambda token: token[1] == TokenType.SEPARATOR, tokens))))
         return tokens
 
-    def __process_symbols(self, tokens):
-        for token, _ in filter(lambda token_data: token_data[1] == TokenType.SYMBOL, tokens):
+    def __process_symbols_and_pif(self, tokens):
+        # symbol table processing
+        for token, token_type in filter(lambda token_data: token_data[1] == TokenType.SYMBOL, tokens):
             if re.fullmatch(r"([a-zA-Z])([a-zA-Z_\d])*", token):
                 self.symbol_table.add(token, SymbolTypes.ID)
             elif re.fullmatch(r"['\"].*['\"]", token) and token[0] == token[-1]:
@@ -77,13 +90,23 @@ class Scanner:
             elif re.fullmatch(r"\d*", token):
                 self.symbol_table.add(token, SymbolTypes.INT_CONST)
             else:
+                # TODO check how wrong tokens are categorized, should be symbols
+                tokens.remove((token, token_type))
                 print('Error:', token, "doesn't satisfy the lexicon of the language.")
-        return self.symbol_table
+
+        # pif processing, necessitates a valid symbol table !!!
+        for token, token_type in tokens:
+            if token_type == TokenType.SYMBOL:
+                symbol_table_item = self.symbol_table.search(token)
+                self.pif.add(token, symbol_table_item.id, symbol_table_item.symbol_type)
+            else:
+                self.pif.add(token)
+        return self.symbol_table, self.pif
 
     def scan(self, filename):
-        self.symbol_table.clear()
+        self.__clear()
         self.__load_file(filename)
-        return self.__process_symbols(self.__parse_tokens())
+        return self.__process_symbols_and_pif(self.__parse_tokens())
 
 
 scanner = Scanner()
@@ -92,13 +115,6 @@ filenames = ['../test_programs/p1.txt', '../test_programs/p2.txt',
 print()
 for name in filenames:
     print('Working on', name + '...')
-    print('\nSymbol table for', name + ':', '\n\n' + str(scanner.scan(name)), '\n')
-
-# test symbol table
-# symbol_table = SymbolTable()
-# symbol_table.add('a', SymbolTypes.CONST)
-# symbol_table.add('b', SymbolTypes.CONST)
-# symbol_table.add('val', SymbolTypes.ID)
-# print(symbol_table.search('a'))
-# print(symbol_table.search('none'))
-# print(symbol_table.search('val'))
+    symbol_table, pif = scanner.scan(name)
+    print('\nSymbol table for', name + ':', '\n\n' + str(symbol_table), '\n')
+    print('\nPIF for', name + ':', '\n\n' + str(pif), '\n')
