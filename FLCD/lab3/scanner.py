@@ -17,7 +17,8 @@ class Scanner:
         self.symbol_table = SymbolTable()
         self.pif = Pif()
         self.keywords = ['for', 'if', 'else', 'while', 'in', 'out', 'Number']
-        self.separators = ['+', '-', '*', '**', '/', '%', '&&', '||', '<=', '==', '!=', '>=', '=',  '<',  '>', '{', '}', '(', ')',
+        self.separators = ['+', '-', '*', '**', '/', '%', '&&', '||', '<=', '==', '!=', '>=', '=', '<', '>', '{', '}',
+                           '(', ')',
                            ';', ' ', '\t', '\n', '"', "'"]
 
     def __clear(self):
@@ -26,12 +27,12 @@ class Scanner:
         self.pif.clear()
 
     def __load_file(self, filename):
-        with open(filename) as f:
-            self.program_lines = f.readlines()
+        with open(filename) as ff:
+            self.program_lines = ff.readlines()
 
     def __parse_tokens(self):
         tokens = []
-        for line in self.program_lines:
+        for line_id, line in enumerate(self.program_lines):
             word = ''
             open_string_quotes = ''
             i = 0
@@ -48,14 +49,14 @@ class Scanner:
                         open_string_quotes = ''
                         tokens.append((word, TokenType.SYMBOL))
                 # handling <= != == >=
-                elif i < len(line) - 1 and (char + line[i+1]) in self.separators:
+                elif i < len(line) - 1 and (char + line[i + 1]) in self.separators:
                     word = word.strip()
                     if len(word):
                         tokens.append((word,
                                        TokenType.SEPARATOR if word in self.keywords + self.separators
                                        else TokenType.SYMBOL))
                     word = ''
-                    tokens.append((char + line[i+1], TokenType.SEPARATOR))
+                    tokens.append((char + line[i + 1], TokenType.SEPARATOR))
                     i += 1
                 # simple separators
                 elif char in self.separators:
@@ -74,10 +75,9 @@ class Scanner:
                     word = word.strip()
                     if len(word):
                         tokens.append((word,
-                                      TokenType.SEPARATOR if word in self.keywords + self.separators
-                                      else TokenType.SYMBOL))
+                                       TokenType.SEPARATOR if word in self.keywords + self.separators
+                                       else TokenType.SYMBOL))
                     word = ''
-        # print(list(map(lambda token: token[0], filter(lambda token: token[1] == TokenType.SEPARATOR, tokens))))
         return tokens
 
     def __process_symbols_and_pif(self, tokens):
@@ -90,9 +90,12 @@ class Scanner:
             elif re.fullmatch(r"\d*", token):
                 self.symbol_table.add(token, SymbolTypes.INT_CONST)
             else:
-                # TODO check how wrong tokens are categorized, should be symbols
                 tokens.remove((token, token_type))
-                print('Error:', token, "doesn't satisfy the lexicon of the language.")
+                lines_data = list(map(lambda line_data: line_data[0],
+                                      filter(lambda line_data: token in line_data[1], enumerate(self.program_lines))
+                                      ))
+                for line_id in lines_data:
+                    print('Error:', token, "doesn't satisfy the lexicon of the language (line " + str(line_id) + ').')
 
         # pif processing, necessitates a valid symbol table !!!
         for token, token_type in tokens:
