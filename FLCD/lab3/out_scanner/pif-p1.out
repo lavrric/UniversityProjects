@@ -1,0 +1,96 @@
+
+PIF for ../test_programs/p1.txt: 
+
+
+x              ->    id:   1,    symbol data:    1,  ID
+=              ->    id:   2,  
+Number         ->    id:   3,  
+(              ->    id:   4,  
+in             ->    id:   5,  
+(              ->    id:   6,  
+"Enter x: "    ->    id:   7,    symbol data:    2,  STRING_CONST
+"Enter x: "    ->    id:   8,    symbol data:    2,  STRING_CONST
+)              ->    id:   9,  
+)              ->    id:   10, 
+)              ->    id:   11, 
+;              ->    id:   12, 
+y              ->    id:   13,   symbol data:    3,  ID
+=              ->    id:   14, 
+Number         ->    id:   15, 
+(              ->    id:   16, 
+in             ->    id:   17, 
+(              ->    id:   18, 
+"Enter y: "    ->    id:   19,   symbol data:    4,  STRING_CONST
+"Enter y: "    ->    id:   20,   symbol data:    4,  STRING_CONST
+)              ->    id:   21, 
+)              ->    id:   22, 
+)              ->    id:   23, 
+;              ->    id:   24, 
+z              ->    id:   25,   symbol data:    5,  ID
+=              ->    id:   26, 
+Number         ->    id:   27, 
+(              ->    id:   28, 
+in             ->    id:   29, 
+(              ->    id:   30, 
+"Enter z: "    ->    id:   31,   symbol data:    6,  STRING_CONST
+"Enter z: "    ->    id:   32,   symbol data:    6,  STRING_CONST
+)              ->    id:   33, 
+)              ->    id:   34, 
+)              ->    id:   35, 
+;              ->    id:   36, 
+if             ->    id:   37, 
+(              ->    id:   38, 
+x              ->    id:   39,   symbol data:    1,  ID
+>=             ->    id:   40, 
+y              ->    id:   41,   symbol data:    3,  ID
+&&             ->    id:   42, 
+x              ->    id:   43,   symbol data:    1,  ID
+=              ->    id:   44, 
+>              ->    id:   45, 
+z              ->    id:   46,   symbol data:    5,  ID
+)              ->    id:   47, 
+{              ->    id:   48, 
+out            ->    id:   49, 
+(              ->    id:   50, 
+x              ->    id:   51,   symbol data:    1,  ID
+)              ->    id:   52, 
+;              ->    id:   53, 
+}              ->    id:   54, 
+else           ->    id:   55, 
+if             ->    id:   56, 
+(              ->    id:   57, 
+y              ->    id:   58,   symbol data:    3,  ID
+>=             ->    id:   59, 
+x              ->    id:   60,   symbol data:    1,  ID
+&&             ->    id:   61, 
+y              ->    id:   62,   symbol data:    3,  ID
+=              ->    id:   63, 
+>              ->    id:   64, 
+z              ->    id:   65,   symbol data:    5,  ID
+)              ->    id:   66, 
+{              ->    id:   67, 
+out            ->    id:   68, 
+(              ->    id:   69, 
+y              ->    id:   70,   symbol data:    3,  ID
+)              ->    id:   71, 
+;              ->    id:   72, 
+}              ->    id:   73, 
+else           ->    id:   74, 
+if             ->    id:   75, 
+(              ->    id:   76, 
+z              ->    id:   77,   symbol data:    5,  ID
+>=             ->    id:   78, 
+x              ->    id:   79,   symbol data:    1,  ID
+&&             ->    id:   80, 
+z              ->    id:   81,   symbol data:    5,  ID
+=              ->    id:   82, 
+>              ->    id:   83, 
+y              ->    id:   84,   symbol data:    3,  ID
+)              ->    id:   85, 
+{              ->    id:   86, 
+out            ->    id:   87, 
+(              ->    id:   88, 
+z              ->    id:   89,   symbol data:    5,  ID
+)              ->    id:   90, 
+;              ->    id:   91, 
+}              ->    id:   92, 

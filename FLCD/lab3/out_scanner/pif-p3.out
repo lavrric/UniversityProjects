@@ -1,0 +1,76 @@
+
+PIF for ../test_programs/p3.txt: 
+
+
+s              ->    id:   1,    symbol data:    1,  ID
+=              ->    id:   2,  
+0              ->    id:   3,    symbol data:    2,  INT_CONST
+;              ->    id:   4,  
+n              ->    id:   5,    symbol data:    3,  ID
+=              ->    id:   6,  
+Number         ->    id:   7,  
+(              ->    id:   8,  
+in             ->    id:   9,  
+(              ->    id:   10, 
+)              ->    id:   11, 
+)              ->    id:   12, 
+;              ->    id:   13, 
+for            ->    id:   14, 
+(              ->    id:   15, 
+i              ->    id:   16,   symbol data:    4,  ID
+=              ->    id:   17, 
+1              ->    id:   18,   symbol data:    5,  INT_CONST
+;              ->    id:   19, 
+i              ->    id:   20,   symbol data:    4,  ID
+*              ->    id:   21, 
+i              ->    id:   22,   symbol data:    4,  ID
+<=             ->    id:   23, 
+n              ->    id:   24,   symbol data:    3,  ID
+;              ->    id:   25, 
+i              ->    id:   26,   symbol data:    4,  ID
++              ->    id:   27, 
++              ->    id:   28, 
+)              ->    id:   29, 
+{              ->    id:   30, 
+if             ->    id:   31, 
+(              ->    id:   32, 
+n              ->    id:   33,   symbol data:    3,  ID
+%              ->    id:   34, 
+i              ->    id:   35,   symbol data:    4,  ID
+==             ->    id:   36, 
+0              ->    id:   37,   symbol data:    2,  INT_CONST
+)              ->    id:   38, 
+{              ->    id:   39, 
+s              ->    id:   40,   symbol data:    1,  ID
+=              ->    id:   41, 
+s              ->    id:   42,   symbol data:    1,  ID
++              ->    id:   43, 
+i              ->    id:   44,   symbol data:    4,  ID
+;              ->    id:   45, 
+if             ->    id:   46, 
+(              ->    id:   47, 
+i              ->    id:   48,   symbol data:    4,  ID
+*              ->    id:   49, 
+i              ->    id:   50,   symbol data:    4,  ID
+!=             ->    id:   51, 
+n              ->    id:   52,   symbol data:    3,  ID
+)              ->    id:   53, 
+{              ->    id:   54, 
+s              ->    id:   55,   symbol data:    1,  ID
+=              ->    id:   56, 
+s              ->    id:   57,   symbol data:    1,  ID
++              ->    id:   58, 
+(              ->    id:   59, 
+n              ->    id:   60,   symbol data:    3,  ID
+/              ->    id:   61, 
+i              ->    id:   62,   symbol data:    4,  ID
+)              ->    id:   63, 
+;              ->    id:   64, 
+}              ->    id:   65, 
+}              ->    id:   66, 
+}              ->    id:   67, 
+out            ->    id:   68, 
+(              ->    id:   69, 
+s              ->    id:   70,   symbol data:    1,  ID
+)              ->    id:   71, 
+;              ->    id:   72, 

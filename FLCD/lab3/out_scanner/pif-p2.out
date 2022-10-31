@@ -1,0 +1,44 @@
+
+PIF for ../test_programs/p2.txt: 
+
+
+x              ->    id:   1,    symbol data:    1,  ID
+=              ->    id:   2,  
+Number         ->    id:   3,  
+(              ->    id:   4,  
+in             ->    id:   5,  
+(              ->    id:   6,  
+)              ->    id:   7,  
+)              ->    id:   8,  
+;              ->    id:   9,  
+ans            ->    id:   10,   symbol data:    2,  ID
+=              ->    id:   11, 
+0              ->    id:   12,   symbol data:    3,  INT_CONST
+;              ->    id:   13, 
+while          ->    id:   14, 
+(              ->    id:   15, 
+x              ->    id:   16,   symbol data:    1,  ID
+%              ->    id:   17, 
+2              ->    id:   18,   symbol data:    4,  INT_CONST
+==             ->    id:   19, 
+0              ->    id:   20,   symbol data:    3,  INT_CONST
+)              ->    id:   21, 
+{              ->    id:   22, 
+ans            ->    id:   23,   symbol data:    2,  ID
+=              ->    id:   24, 
+ans            ->    id:   25,   symbol data:    2,  ID
++              ->    id:   26, 
+1              ->    id:   27,   symbol data:    5,  INT_CONST
+;              ->    id:   28, 
+x              ->    id:   29,   symbol data:    1,  ID
+=              ->    id:   30, 
+x              ->    id:   31,   symbol data:    1,  ID
+/              ->    id:   32, 
+2              ->    id:   33,   symbol data:    4,  INT_CONST
+;              ->    id:   34, 
+}              ->    id:   35, 
+out            ->    id:   36, 
+(              ->    id:   37, 
+ans            ->    id:   38,   symbol data:    2,  ID
+)              ->    id:   39, 
+;              ->    id:   40, 

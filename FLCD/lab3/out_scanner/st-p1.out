@@ -1,0 +1,11 @@
+
+Symbol table for ../test_programs/p1.txt: 
+
+Sym           Type          Id
+"Enter z: "   STRING_CONST  6
+"Enter x: "   STRING_CONST  2
+y             ID            3
+x             ID            1
+"Enter y: "   STRING_CONST  4
+z             ID            5
+------------------------------

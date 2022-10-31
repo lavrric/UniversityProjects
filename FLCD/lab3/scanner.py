@@ -112,9 +112,14 @@ class Scanner:
 scanner = Scanner()
 filenames = ['../test_programs/p1.txt', '../test_programs/p2.txt',
              '../test_programs/p3.txt', '../test_programs/p1_err.txt']
-print()
+
 for name in filenames:
     print('Working on', name + '...')
     symbol_table, pif = scanner.scan(name)
-    print('\nSymbol table for', name + ':', '\n\n' + str(symbol_table), '\n')
-    print('\nPIF for', name + ':', '\n\n' + str(pif), '\n')
+    short_name = name.split("/")[-1].split(".")[-2]  # TODO change in case filenames change structure
+    with open(f'./out_scanner/st-{short_name}.out', 'w') as f:
+        f.write('\nSymbol table for ' + name + ': ' + '\n\n' + str(symbol_table) + '\n')
+        f.close()
+    with open(f'./out_scanner/pif-{short_name}.out', 'w') as f:
+        f.write('\nPIF for ' + name + ': ' + '\n\n' + str(pif) + '\n')
+        f.close()
