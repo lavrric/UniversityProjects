@@ -1,0 +1,57 @@
+
+program ::= stmtWrapper {program}
+
+stmtWrapper ::=    simpleStmt ';' | structStmt
+			| '{' (simpleStmt ';' | structStmt) '}'
+simpleStmt ::= outStmt | assignStmt
+
+outStmt ::= 'out(' {IDENTIFIER | CONSTANTS} ')'  (* output, can also output nothing *)
+assignStmt ::= IDENTIFIER '=' expression
+
+expression ::=    {(expression | value) OPERATOR} (expression | value)  
+			| '(' {(expression | value) OPERATOR} (expression | value) ')' 
+
+value ::= (ioValue | arrayValue | airthmeticValue)
+ioValue ::= 'in()' (* input *)
+arrayValue ::= '[' {value} ']'
+
+arithmeticExpression ::= 	{(arithmeticExpression | value) arithmeticRelation} (arithmeticExpression | value)  
+					  | '(' {(arithmeticExpression | value) arithmeticRelation} (arithmeticExpression | value) ')' 
+arithmeticValue ::= (castValue | IDENTIFIER | CONSTANTS)
+arithmeticRelation ::= '+' | '-' | '*' | '**' | '/' | '%'
+
+castValue ::= 'Number(' IDENTIFIER | CONSTSTRING ')'
+
+
+structStmt ::= ifStmt | whileStmt | forStmt
+ifStmt ::= 'if{' condition '}' stmtWrapper {'else if(' condition ')' stmtWrapper} ['else(' condition ')' stmtWrapper]
+whileStmt ::= 'while{' condition '}' stmtWrapper
+forStmt ::= 'for(' assignStmt ';' condition ';' assignStmt ')' stmtWrapper
+
+condition ::= expression {(compRelation | boolRelation) expression}
+
+compRelation ::= '<' | '<=' | '==' | '!=' | '>=' | '>'
+boolRelation ::= '&&' | '||'
+
+
+(* LEXIC RULES COPY PASTED *)
+
+IDENTIFIER ::= letter | letter{letter|digit}
+
+letter ::= 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z' 
+		 | 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z' 
+nz_digit ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' 
+digit ::= '0' | nz_digit
+
+number ::= int {'.' ['0'] unsignedInt}
+int ::= '0' | ( {'+'|'-'} nzInt)
+unsignedInt ::= '0' | nzInt
+nzInt ::= nzDigit {digit} {nzInt}
+
+constString ::= '"' string '"' | "'" string "'"
+string ::= char {string}
+char ::= letter | digit
+
+boolean :: trueVal | falseVal
+trueVal ::= 'True'
+falseVal ::= 'False'

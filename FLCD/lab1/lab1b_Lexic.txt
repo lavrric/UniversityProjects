@@ -1,0 +1,44 @@
+Alphabet:
+
+a. Upper (A-Z) and lower case letters (a-z) of the English alphabet
+
+      b. Underline character '_';
+      c. Decimal digits (0-9);
+
+Lexic:
+
+      a. Special symbols, representing:
+
+		- operators: + - * ** / % = < <= == != >= >
+		- separators: { }  : ; space
+		- reserved words: if else while for
+
+      b. identifiers < 256 chars
+
+  		- a sequence of letters and  digits, such that the first character is a letter; the rule is:
+
+    			identifier ::= letter | letter{letter|digit}
+
+    			letter ::= 'A' | 'B' | . ..| 'Z'
+    			nzDigit ::= '1' | '2' |...| '9'
+    			digit ::= '0' | nzDigit
+
+
+      c.constants
+
+            constant ::= number | constString | boolean 
+
+-------------------
+
+number ::= int {'.' ['0'] unsignedInt}
+int ::= '0' | ( {'+'|'-'} nzInt)
+unsignedInt ::= '0' | nzInt
+nzInt ::= nzDigit {digit} {nzInt}
+
+constString ::= '"' string '"' | "'" string "'"
+string ::= char {string}
+char ::= letter | digit
+
+boolean :: trueVal | falseVal
+trueVal ::= 'True'
+falseVal ::= 'False'

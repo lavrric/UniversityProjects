@@ -1,0 +1,64 @@
+// python variables, else classic
+
+
+// P1.* max of 3 numbers
+
+x = Number(in("Enter x: ")));
+y = Number(in("Enter y: ")));
+z = Number(in("Enter z: ")));
+
+if(x >= y && x => z){
+	out(x);
+}
+else if(y >= x && y => z){
+	out(y);
+}
+else if(z >= x && z => y){
+	out(z);
+}
+
+
+// P2.* power of 2 in an integer
+
+x = Number(in());
+ans = 0;
+while(x % 2 == 0){
+	ans = ans + 1;
+	x = x/2;
+}
+out(ans);
+
+
+
+// P3.* sum divisors of a number
+
+s = 0;
+
+
+n = Number(in());
+for(i = 1; i * i <= n; i++){
+	if(n % i == 0){
+		s = s + i;
+		if(i * i != n){
+			s = s + (n/i);
+		}
+	}
+}
+out(s);
+
+
+// P1err.*
+
+x = nuumber(in()));
+y = Number(in()));
+2z = Number(in()));
+
+if(x >= y && x => z){
+	out(x);
+}
+else if(y >= x && y => z){
+	out(y);
+}
+else if(z >= x && z => y){
+	out(z);
+}
