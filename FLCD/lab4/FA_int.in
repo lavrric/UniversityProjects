@@ -1,0 +1,11 @@
+3
+start
+zero
+non-zero
+2
+zero
+non-zero
+3
+start zero 0
+start non-zero 123456789
+non-zero non-zero 0123456789
