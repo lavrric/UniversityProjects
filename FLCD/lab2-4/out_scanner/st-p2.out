@@ -3,8 +3,8 @@ Symbol table for ../test_programs/p2.txt:
 
 Sym           Type          Id
 2             INT_CONST     4
-1             INT_CONST     5
 0             INT_CONST     3
-x             ID            1
+1             INT_CONST     5
 ans           ID            2
+x             ID            1
 ------------------------------

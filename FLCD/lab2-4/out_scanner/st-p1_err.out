@@ -2,8 +2,8 @@
 Symbol table for ../test_programs/p1_err.txt: 
 
 Sym           Type          Id
-nuumber       ID            2
 x             ID            1
-z             ID            4
+nuumber       ID            2
 y             ID            3
+z             ID            4
 ------------------------------

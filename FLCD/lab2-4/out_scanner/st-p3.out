@@ -2,9 +2,9 @@
 Symbol table for ../test_programs/p3.txt: 
 
 Sym           Type          Id
-0             INT_CONST     2
 n             ID            3
 1             INT_CONST     5
-i             ID            4
 s             ID            1
+0             INT_CONST     2
+i             ID            4
 ------------------------------

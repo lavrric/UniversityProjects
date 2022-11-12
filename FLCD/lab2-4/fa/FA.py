@@ -14,7 +14,7 @@ class Transition:
 class State:
     def __init__(self, name):
         self.name = name
-        self.transitions = [] # keep the transitions that start from this state
+        self.transitions = []  # keep the transitions that start from this state
         self.is_start = False
         self.is_final = False
 
@@ -91,7 +91,7 @@ class FiniteAutomata:
     def __str__(self):
         return '\n\n'.join(list(map(lambda t: t.full_str(), self.states)))
 
-    def check_sequence(self, s):
+    def check_string(self, s):
         cur_state = self.start_state
         cur_index = 0
         while cur_index < len(s):
@@ -111,29 +111,29 @@ def list_to_str(ll):
     return reduce(lambda acc, cur: acc + str(cur) + '\n', ll, '')
 
 
-filename = 'FA_int.in'
-FA = FiniteAutomata(filename)
-menu = {
-    '0': ('states', lambda _: print(list_to_str(FA.states))),
-    '1': ('alphabet', lambda _: print('Alphabet:\n' + str(FA.sorted_alphabet))),
-    '2': ('transitions', lambda _: print(list_to_str(FA.transitions))),
-    '3': ('initial state', lambda _: print(FA.start_state.full_str())),
-    '4': ('final states', lambda _: print(list_to_str(FA.final_states))),
-    '5': ('full info', lambda _: print(FA)),
-    '6': ('check string', lambda s: print(FA.check_sequence(s))),
-    '7': ('exit', lambda _: exit(0))
-}
-
-done = False
-while not done:
-    print()
-    for item in menu.items():
-        print(item[0] + ':', item[1][0])
-    chosen = input()
-    if chosen not in menu.keys():
-        print('Not a menu key')
-    else:
-        param = ''
-        if chosen == '6':
-            param = input('Enter string:\n')
-        menu[chosen][1](param)
+# filename = './FA_int.in'
+# FA = FiniteAutomata(filename)
+# menu = {
+#     '0': ('states', lambda _: print(list_to_str(FA.states))),
+#     '1': ('alphabet', lambda _: print('Alphabet:\n' + str(FA.sorted_alphabet))),
+#     '2': ('transitions', lambda _: print(list_to_str(FA.transitions))),
+#     '3': ('initial state', lambda _: print(FA.start_state.full_str())),
+#     '4': ('final states', lambda _: print(list_to_str(FA.final_states))),
+#     '5': ('full info', lambda _: print(FA)),
+#     '6': ('check string', lambda s: print(FA.check_string(s))),
+#     '7': ('exit', lambda _: exit(0))
+# }
+#
+# done = False
+# while not done:
+#     print()
+#     for item in menu.items():
+#         print(item[0] + ':', item[1][0])
+#     chosen = input()
+#     if chosen not in menu.keys():
+#         print('Not a menu key')
+#     else:
+#         param = ''
+#         if chosen == '6':
+#             param = input('Enter string:\n')
+#         menu[chosen][1](param)

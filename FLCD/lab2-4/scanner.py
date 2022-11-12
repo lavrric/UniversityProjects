@@ -1,6 +1,7 @@
 import re
 from enum import Enum
 
+from fa.FA import FiniteAutomata
 from pif.pif import Pif
 from symbol_table.symbol_table import SymbolTable, SymbolTypes
 
@@ -19,6 +20,8 @@ class Scanner:
         self.separators = ['+', '-', '*', '**', '/', '%', '&&', '||', '<=', '==', '!=', '>=', '=', '<', '>', '{', '}',
                            '(', ')',
                            ';', ' ', '\t', '\n', '"', "'"]
+        self.fa_int = FiniteAutomata('./fa/FA_int.in')
+        self.fa_id = FiniteAutomata('./fa/FA_id.in')
 
     def __clear(self):
         self.program_lines = []
@@ -82,11 +85,11 @@ class Scanner:
     def __process_symbols_and_pif(self, tokens):
         # symbol table processing
         for token, token_type in filter(lambda token_data: token_data[1] == TokenType.SYMBOL, tokens):
-            if re.fullmatch(r"([a-zA-Z])([a-zA-Z_\d])*", token):
+            if self.fa_id.check_string(token):
                 self.symbol_table.add(token, SymbolTypes.ID)
             elif re.fullmatch(r"['\"].*['\"]", token) and token[0] == token[-1]:
                 self.symbol_table.add(token, SymbolTypes.STRING_CONST)
-            elif re.fullmatch(r"\d*", token):
+            elif self.fa_int.check_string(token):
                 self.symbol_table.add(token, SymbolTypes.INT_CONST)
             else:
                 tokens.remove((token, token_type))
