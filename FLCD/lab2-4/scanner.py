@@ -1,9 +1,8 @@
 import re
 from enum import Enum
 
-from lab2.symbol_table import SymbolTable
-from lab2.symbol_types import SymbolTypes
-from lab3.pif import Pif
+from pif.pif import Pif
+from symbol_table.symbol_table import SymbolTable, SymbolTypes
 
 
 class TokenType(Enum):

@@ -1,6 +1,6 @@
 from functools import reduce
 
-from linked_list import LinkedList
+from pif.linked_list import LinkedList
 
 
 class PifItem:

@@ -1,5 +1,16 @@
 from functools import reduce
-from hash_table import HashTable
+from enum import Enum
+
+from symbol_table.hash_table import HashTable
+
+
+class SymbolTypes(Enum):
+    ID = 1
+    STRING_CONST = 2
+    INT_CONST = 3
+
+    def __str__(self):
+        return self.name
 
 
 class SymbolTableItem:
