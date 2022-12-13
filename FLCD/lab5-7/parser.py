@@ -1,77 +1,145 @@
-from functools import reduce
+from typing import Optional
+from grammar import Grammar, Production
+from parsing_table import ParsingTable, Action
+from state import State
+from parsing_output import ParsingOutput
 
 
 class Parser:
-    def __init__(self):
-        self.__terminals = set()
-        self.__non_terminals = set()
-        self.__initial = None
-        self.__productions = {}  # non terminal -> production[]
-        self.__is_cfg = True
-    
-    @property
-    def terminals(self):
-        return sorted(self.__terminals)
+    def __init__(self, _grammar):
+        self.grammar = _grammar
+        self.pt: Optional[ParsingTable] = None
 
-    @property
-    def non_terminals(self):
-        return sorted(self.__non_terminals)
+    def closure(self, states):
+        ans = states[:]
+        queue = states[:]
+        while len(queue):
+            state = queue.pop()
+            # print(state)
+            potential_non_terminal = state.string_after_point
+            for prod in self.grammar.productions_for_one(potential_non_terminal):
+                new_state = State(prod, 0)
+                if new_state not in ans:
+                    queue.append(new_state)
+                    ans.append(new_state)
+        return ans
 
-    @property
-    def initial(self):
-        return self.__initial
+    def goto(self, states, term):
+        return self.closure([state.shift_dot_right() for state in states if state.string_after_point == term])
 
-    @property
-    def productions(self):
-        return self.__productions
+    def canonical_collection(self):
+        init = self.grammar.initial
+        initial_state = State(Production("S'", init), 0)
 
-    def productions_for_one(self, non_terminal):
-        return self.__productions[non_terminal]
+        canonical_collection = []
+        goto_dest = {}
 
-    def read(self, filename: str):
-        f = open(filename, 'r')
-        lines = f.readlines()
+        terms = self.grammar.non_terminals
+        terms.extend(self.grammar.terminals)
 
-        terminals = lines[0]
-        non_terminals = lines[1]
-        initial = lines[2]
-        productions = lines[3:]
+        s0 = self.closure([initial_state])
+        print("s0:", list(map(str, s0)))
+        canonical_collection.append(s0)
+        i = 0
 
-        for nt in non_terminals.split():
-            self.__non_terminals.add(nt)
+        while i < len(canonical_collection):
+            s = canonical_collection[i]
 
-        for t in terminals.split():
-            self.__terminals.add(t)
+            for term in terms:
+                candidate = self.goto(s, term)
+                if len(candidate) == 0:
+                    continue
 
-        self.__initial = initial.strip()
+                def add_to_goto_dest(i, term, dest):
+                    if i not in goto_dest:
+                        goto_dest[i] = {}
 
-        for prod_line in productions:
-            if len(prod_line.strip()):
-                self.__process_production_line(prod_line)
+                    goto_dest[i][term] = dest
 
-    def __process_production_line(self, prod_line: str):
-        non_terminal, rhp = list(map(lambda s: s.strip(), prod_line.split('->')))
-        if non_terminal not in self.__non_terminals:  # checks if context free
-            print('NON TERMINAL: ' + non_terminal)
-            exit(0)
+                try:
+                    si = canonical_collection.index(candidate)
+                    add_to_goto_dest(i, term, si)
+                except ValueError:
+                    print(f"s{len(canonical_collection)} = goto({i}, {term}) = {list(map(str, candidate))}")
+                    add_to_goto_dest(i, term, len(canonical_collection))
+                    canonical_collection.append(candidate)
 
-        for rule in list(map(lambda s: s.strip(), rhp.split('|'))):
-            if non_terminal in self.__productions:
-                self.__productions[non_terminal].append(rule)
-            else:
-                self.__productions[non_terminal] = [rule]
+            i += 1
+
+        return canonical_collection, goto_dest
+
+    def construct_parsing_table(self):
+        cc, gtd = self.canonical_collection()
+
+        self.pt = ParsingTable(self.grammar)
+        self.pt.process_canonical_collection(cc, gtd)
+
+        print(self.pt)
+
+    def parse(self, s):
+        if self.pt is None:
+            self.construct_parsing_table()
+        working_stack = ['$', 0]
+        input_stack = [c for c in s] + ['$']  # TODO it should keeps terminals, not chars
+        output_stack = []
+
+        def print_current_state():
+            print(f'Work: {working_stack}\t|\t Input: {input_stack}\t|\t Output: {output_stack}')
+
+        while True:
+            state_no = working_stack[-1]
+            action = self.pt.get_action_for_set(state_no)
+
+            if action == Action.REDUCE:
+                print_current_state()
+                production = self.pt.get_reduction(state_no)
+                output_stack.append(production)  # append at the end, then reverse
+                print("Reducing with production", production)
+
+                rhs_terms = production.rhs.split()
+                while len(rhs_terms):
+                    working_stack.pop(-1)  # pop state
+                    cur_term = rhs_terms.pop(-1)
+                    if cur_term != working_stack.pop(-1):
+                        raise Exception('Not cool when reducing.')
+
+                working_stack.append(production.lhs)
+                print_current_state()
+                last_state = working_stack[-2]
+                last_term = working_stack[-1]
+                print('Adding a state after reduce: state =', last_state, 'term =',  last_term)
+                next_state_no = self.pt.get_goto_destination(last_state, last_term)
+                working_stack.append(next_state_no)
+                print()
+
+            elif action == Action.SHIFT:
+                print_current_state()
+                next_terminal = input_stack.pop(0)
+                print(f'Shifting... current state = {state_no} \t|\t next terminal = {next_terminal} \t|\t '
+                      f'goTo = {self.pt.get_goto_destination(state_no, next_terminal)}')
+                next_state_no = self.pt.get_goto_destination(state_no, next_terminal)
+                working_stack.extend([next_terminal, next_state_no])
+                print()
+
+            else:  # accept
+                print_current_state()
+                print('Accepting...')
+                output_stack.reverse()
+                return output_stack
 
 
-parser = Parser()
-filename = 'g2.txt'  # 'top_g.txt'
-parser.read(filename)
+if __name__ == '__main__':
+    grammar_in = Grammar()
+    filename = './top_g.txt'
+    grammar_in.read(filename)
 
-print()
-print('Non Terminals:', ', '.join(parser.non_terminals))
-print('Terminals:', ', '.join(parser.terminals))
-print('Initial terminal:', parser.initial, '\n')
-print('Getter for productions for the last non-terminal:', parser.productions_for_one(parser.non_terminals[-1]))
-print('Productions:', reduce(
-    lambda acc, cur: acc + '\n' + str(cur[0]) + ' -> ' + str(cur[1]),
-    parser.productions.items(), '')
-)
+    parser = Parser(grammar_in)
+    parser.construct_parsing_table()
+    s = 'accbc'
+    parsing_output = parser.parse(s)
+    print(f'PARSING {s}... output = {list(map(str, parsing_output))}\n')
+
+    po = ParsingOutput()
+    po.process_parser_output(parsing_output)
+    print('Parsing output:', po, sep='\n')
+    po.print_to_file('top_g_output.txt')
