@@ -88,7 +88,7 @@ class Grammar:
 
 if __name__ == '__main__':
     grammar = Grammar()
-    filename = 'top_g.txt'
+    filename = 'grammars/top_g.txt'
     grammar.read(filename)
 
     print()

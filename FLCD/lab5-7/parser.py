@@ -3,6 +3,7 @@ from grammar import Grammar, Production
 from parsing_table import ParsingTable, Action
 from state import State
 from parsing_output import ParsingOutput
+from pif_reader import PifReader
 
 
 class Parser:
@@ -80,66 +81,76 @@ class Parser:
         if self.pt is None:
             self.construct_parsing_table()
         working_stack = ['$', 0]
-        input_stack = [c for c in s] + ['$']  # TODO it should keeps terminals, not chars
+        input_stack = [c for c in s] + ['$']
         output_stack = []
 
         def print_current_state():
-            print(f'Work: {working_stack}\t|\t Input: {input_stack}\t|\t Output: {output_stack}')
+            print(f'Work: {working_stack}\t|\t Input: {input_stack}\t|\t Output: {list(map(str, reversed(output_stack)))}')
 
         while True:
             state_no = working_stack[-1]
             action = self.pt.get_action_for_set(state_no)
 
-            if action == Action.REDUCE:
-                print_current_state()
-                production = self.pt.get_reduction(state_no)
-                output_stack.append(production)  # append at the end, then reverse
-                print("Reducing with production", production)
+            if action == Action.SHIFT or action == Action.REDUCE:
+                reduce = False
+                if action == Action.SHIFT:
+                    print_current_state()
+                    next_terminal = input_stack[0]
+                    try:
+                        print(f'Shifting... current state = {state_no} \t|\t next terminal = {next_terminal} \t|\t '
+                              f'goTo = {self.pt.get_goto_destination(state_no, next_terminal)}')
+                        next_state_no = self.pt.get_goto_destination(state_no, next_terminal)
+                        input_stack.pop(0)
+                        working_stack.extend([next_terminal, next_state_no])
+                        print()
+                    except:
+                        reduce = True
+                if action == Action.REDUCE or reduce:
+                    print_current_state()
+                    production = self.pt.get_reduction(state_no)
+                    output_stack.append(production)  # append at the end, then reverse
+                    print("Reducing with production", production)
 
-                rhs_terms = production.rhs.split()
-                while len(rhs_terms):
-                    working_stack.pop(-1)  # pop state
-                    cur_term = rhs_terms.pop(-1)
-                    if cur_term != working_stack.pop(-1):
-                        raise Exception('Not cool when reducing.')
+                    rhs_terms = production.rhs.split()
+                    while len(rhs_terms):
+                        working_stack.pop(-1)  # pop state
+                        cur_term = rhs_terms.pop(-1)
+                        if cur_term != working_stack.pop(-1):
+                            raise Exception('Not cool when reducing.')
 
-                working_stack.append(production.lhs)
-                print_current_state()
-                last_state = working_stack[-2]
-                last_term = working_stack[-1]
-                print('Adding a state after reduce: state =', last_state, 'term =',  last_term)
-                next_state_no = self.pt.get_goto_destination(last_state, last_term)
-                working_stack.append(next_state_no)
-                print()
-
-            elif action == Action.SHIFT:
-                print_current_state()
-                next_terminal = input_stack.pop(0)
-                print(f'Shifting... current state = {state_no} \t|\t next terminal = {next_terminal} \t|\t '
-                      f'goTo = {self.pt.get_goto_destination(state_no, next_terminal)}')
-                next_state_no = self.pt.get_goto_destination(state_no, next_terminal)
-                working_stack.extend([next_terminal, next_state_no])
-                print()
+                    working_stack.append(production.lhs)
+                    print_current_state()
+                    last_state = working_stack[-2]
+                    last_term = working_stack[-1]
+                    print('Adding a state after reduce: state =', last_state, 'term =', last_term)
+                    next_state_no = self.pt.get_goto_destination(last_state, last_term)
+                    working_stack.append(next_state_no)
+                    print()
 
             else:  # accept
                 print_current_state()
                 print('Accepting...')
                 output_stack.reverse()
-                return output_stack
+
+                po = ParsingOutput()
+                po.process_parser_output(output_stack)
+                return po
 
 
 if __name__ == '__main__':
     grammar_in = Grammar()
-    filename = './top_g.txt'
+    grammar_no = 2
+    program_particularity = '_condition'
+    filename = f'./grammars/g{str(grammar_no) + program_particularity}.txt'
     grammar_in.read(filename)
 
     parser = Parser(grammar_in)
     parser.construct_parsing_table()
-    s = 'accbc'
-    parsing_output = parser.parse(s)
-    print(f'PARSING {s}... output = {list(map(str, parsing_output))}\n')
 
-    po = ParsingOutput()
-    po.process_parser_output(parsing_output)
+    pr = PifReader()
+    pr.readPIF(f'./pif/PIF{program_particularity}.out')
+
+    po = parser.parse(pr.get_keys())
     print('Parsing output:', po, sep='\n')
-    po.print_to_file('top_g_output.txt')
+    po.print_to_file(f'./out/g{str(grammar_no) + program_particularity}.out')
+

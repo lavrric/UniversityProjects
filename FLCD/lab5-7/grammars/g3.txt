@@ -1,0 +1,20 @@
+; IDENTIFIER CONSTANT + - * / % < > <= = == != >= && ( ) { } in() out
+program stmtList stmt outStmt assignStmt structStmt ifStmt whileStmt forStmt condition expression compRelation value factor term ioValue castValue
+program
+program -> { stmtList }
+stmtList -> stmt ; | stmt ; stmtList
+stmt -> outStmt | assignStmt | structStmt
+outStmt -> out ( IDENTIFIER | CONSTANT )
+assignStmt -> IDENTIFIER = expression
+structStmt -> ifStmt | whileStmt | forStmt
+ifStmt -> if ( condition ) program
+whileStmt -> while ( condition ) program
+forStmt -> for ( assignStmt ; condition ; assignStmt ) program
+condition -> expression | expression compRelation expression
+compRelation -> < | <= | == | != | >= | > | &&
+expression -> term | expression - term | expression + term
+term -> factor | factor * term | factor / factor
+factor -> IDENTIFIER | CONSTANT | value | ( expression )
+value -> ioValue | castValue
+ioValue -> in()
+castValue -> Number ( IDENTIFIER ) | Number ( CONSTANT )

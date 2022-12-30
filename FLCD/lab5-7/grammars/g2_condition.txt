@@ -1,0 +1,16 @@
+IDENT CONST + - * / % < > <= = == >= && || < > { } ( ) [ ] " , int string char bool array if while for READ PRINT BEGIN END STOP endline true false
+OPERATOR expression term RELATION condition ioStmt assignStmt simplStmt ifStmt whileStmt structStmt stmt stmtlist cmpdStmt primType arrType type declaration program declaration_list
+program
+OPERATOR -> + | - | * | / | %
+RELATION -> < | <= | != | >= | > | == | &&
+expression -> IDENT | CONST | true | false
+condition -> expression RELATION expression
+ioStmt -> READ expression | PRINT expression
+assignStmt -> IDENT = expression
+simplStmt -> ioStmt | assignStmt
+ifStmt -> if ( condition ) endline stmtlist | if ( condition ) endline stmtlist else stmtlist
+structStmt -> ifStmt | cmpdStmt
+stmt -> structStmt | simplStmt | STOP
+stmtlist -> stmt | stmtlist endline stmt | stmtlist stmt
+cmpdStmt -> BEGIN endline stmtlist endline END
+program -> stmtlist | stmtlist endline

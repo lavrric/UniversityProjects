@@ -1,0 +1,30 @@
+int {a}
+int {i}
+
+READ a
+
+if (a == 2)
+BEGIN
+    PRINT true
+    STOP
+END
+
+if (a%2==0)
+BEGIN
+    PRINT false
+    STOP
+END
+
+i = 3
+
+while (i*i < a)
+BEGIN
+    if (a % i == 0)
+    BEGIN
+        PRINT false
+        STOP
+    END
+    i = i + 2
+END
+
+PRINT true

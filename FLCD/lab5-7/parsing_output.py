@@ -53,7 +53,6 @@ class Node:
 class ParsingOutput:
     def __init__(self) -> None:
         self.__head = None
-        self.current_node = None
 
     def search_parent(self, node: Node, value):
         if node.right_sibling:

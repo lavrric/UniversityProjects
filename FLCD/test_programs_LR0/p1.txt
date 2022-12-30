@@ -1,0 +1,16 @@
+{
+    x = Number(in("Enter x: ")));
+    y = Number(in("Enter y: ")));
+    z = Number(in("Enter z: ")));
+
+    if(x >= y && x => z){
+        out(x);
+    }
+    if(y > x && y >= z){
+        out(y);
+    }
+    if(z > x && z > y){
+        out(z);
+    }
+}
+
