@@ -140,7 +140,7 @@ class Parser:
 if __name__ == '__main__':
     grammar_in = Grammar()
     grammar_no = 2
-    program_particularity = '_condition'
+    program_particularity = '' # '_condition'
     filename = f'./grammars/g{str(grammar_no) + program_particularity}.txt'
     grammar_in.read(filename)
 

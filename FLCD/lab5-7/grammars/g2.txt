@@ -1,23 +1,22 @@
-IDENT CONST + - * / % < > <= = == >= && || < > { } ( ) [ ] " , int string char bool array if while for READ PRINT BEGIN END STOP endline
+IDENT CONST + - * / % < > <= = == >= && || < > { } ( ) [ ] " , int string char bool array if while for READ PRINT BEGIN END STOP endline true false
 OPERATOR expression term RELATION condition ioStmt assignStmt simplStmt ifStmt whileStmt structStmt stmt stmtlist cmpdStmt primType arrType type declaration program declaration_list
 program
-OPERATOR -> + | - | * | / | % | &&
-expression -> term | expression OPERATOR term
-term -> IDENT | CONST | ( expression )
-RELATION -> < | <= | = | != | >= | >
+OPERATOR -> + | - | * | / | %
+RELATION -> < | <= | != | >= | > | == | &&
+expression -> IDENT | CONST | true | false | IDENT OPERATOR IDENT | IDENT OPERATOR CONST | CONST OPERATOR IDENT | CONST OPERATOR CONST
 condition -> expression RELATION expression
 ioStmt -> READ expression | PRINT expression
 assignStmt -> IDENT = expression
 simplStmt -> ioStmt | assignStmt
-ifStmt -> if ( condition ) endline stmtlist | if ( condition ) endline stmtlist else stmtlist
-whileStmt -> while ( condition ) endline stmtlist
-structStmt -> ifStmt | whileStmt | cmpdStmt
-stmt -> structStmt | simplStmt | declaration | STOP
-stmtlist -> stmt | stmt endline | stmtlist endline stmt | stmtlist stmt
+ifStmt -> if ( condition ) endline cmpdStmt | if ( condition ) endline cmpdStmt else endline cmpdStmt
+whileStmt -> while ( condition ) endline cmpdStmt
+structStmt -> ifStmt | cmpdStmt | whileStmt
+stmt -> structStmt | simplStmt | STOP | declaration
+stmtlist -> stmt | stmtlist endline stmt
 cmpdStmt -> BEGIN endline stmtlist endline END
+program -> cmpdStmt | cmpdStmt endline
+type -> primType
 primType -> int | string | bool | char
-arrType -> array ( primType ) [ no ]
-type -> primType | arrType
+arrType -> array ( primType ) [ CONST ]
 declaration_list -> IDENT | declaration_list , IDENT
 declaration -> type { declaration_list }
-program -> stmtlist endline
