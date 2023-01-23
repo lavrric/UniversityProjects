@@ -1,13 +1,13 @@
-x = nuumber(in()));
+x = 003nuumber(in()));
 y = Number(in()));
 2z = Number(in()));
 
-if(x >= y && x => z){
-	out(x);
+if(x >= y && x >= z){
+    out(x);
 }
-else if(y >= x && y => z){
+elif(y >= x && y >= z){
 	out(y);
 }
-else if(z >= x && z => y){
+elif(z >= x && z >= y){
 	out(z);
 }

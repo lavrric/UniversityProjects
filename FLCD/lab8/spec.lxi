@@ -1,0 +1,44 @@
+%{
+	#include <stdio.h>
+	#include <string.h>
+	int lines = 0;
+%}
+
+%option noyywrap
+%option caseless
+
+DIGIT 		    [0-9]
+NON_ZERO_DIGIT  [1-9]
+INT_CONST       [-]?{NON_ZERO_DIGIT}{DIGIT}*|0
+LETTER          [a-zA-Z]
+STRING_CONST    ["$]({LETTER}|{DIGIT}|" "|":")*["$]
+ID              {LETTER}({LETTER}|{DIGIT})*
+
+%%
+
+Number|in|out|elif|if|else|for  {printf( "Reserved word: %s\n", yytext);}
+{ID}                            {printf( "Id: %s\n", yytext );}
+{INT_CONST}                     {printf( "Int Constant: %s\n", yytext );}
+{STRING_CONST}                  {printf( "String Constant: %s\n", yytext );}
+
+[ \t]+ 	    /* eats whitespace */
+[\n]+ 	    {lines++;}
+
+"("|")"|"{"|"}"|";" {printf( "Separator: %s\n", yytext );} /* " "   {printf( "Separator: space\n", yytext );} */
+"+"|"-"|"*"|"/"|"%"|"<"|"<="|"=="|"="|">="|"!="|"&&"                {printf( "Operator: %s\n", yytext );}
+
+.           {printf("Error at token %s at line %d\n", yytext, lines); exit(1);}
+
+%%
+
+int main(int argc, char **argv )
+{
+    ++argv, --argc; /* skip over program name */
+    if ( argc > 0 ){
+        yyin = fopen( argv[0], "r" );
+    }
+    else {
+        yyin = stdin;
+    }
+    yylex();
+}

@@ -1,0 +1,48 @@
+%{
+	#include <stdio.h>
+	#include <string.h>
+	#include "parser.tab.h"
+	int lines = 0;
+%}
+
+%option noyywrap
+%option caseless
+
+DIGIT 		    [0-9]
+NON_ZERO_DIGIT  [1-9]
+INT_CONST       [-]?{NON_ZERO_DIGIT}{DIGIT}*|0
+LETTER          [a-zA-Z]
+STRING_CONST    ["$]({LETTER}|{DIGIT}|" "|":")*["$]
+ID              {LETTER}({LETTER}|{DIGIT})*
+
+%%
+
+Number                  {return NUMBER;}
+in                      {return IN;}
+out                     {return OUT;}
+elif                    {return ELIF;}
+if                      {return IF;}
+else                    {return ELSE;}
+while                   {return WHILE;}
+{ID}                    {return ID;}
+{INT_CONST}             {return INT_CONST;}
+{STRING_CONST}          {return STRING_CONST;}
+
+[ \t]+ 	    /* eats whitespace yylval.p_val = yytext; */
+[\n]+ 	    {lines++;}
+
+"&&"             {return AND;}
+"<="             {return LE;}
+">="             {return GE;}
+"!="             {return NEQ;}
+"=="             {return EQ;}
+"("              {return OPEN_ROUND;}
+")"              {return CLOSE_ROUND;}
+"{"              {return OPEN_CURLY;}
+"}"              {return CLOSE_CURLY;}
+"="              {return ATTR;}
+";"              {return SEMICOLON;}
+
+.           {printf("Error at token %s at line %d\n", yytext, lines); exit(1);}
+
+%%
